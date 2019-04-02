@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 # Turtlecoin Multi-installer
-# a one line clone-and-compile for turtlecoin:
+# a one line clone-and-compile for catalanscoin:
 #
-#     ` $ curl -sL "https://raw.githubusercontent.com/turtlecoin/turtlecoin/master/scripts/multi_installer.sh" | bash
+#     ` $ curl -sL "https://raw.githubusercontent.com/catalanscoin/catalanscoin/master/scripts/multi_installer.sh" | bash
 #
 # Supports Ubuntu 16.04 LTS, OSX 10.10+
 # Supports building project from current directory (automatic detection)
@@ -41,26 +41,26 @@ _set_wd() {
         _note "Building project from current working directory ($PWD)"
     else
         _note "Cloning project with git..."
-        if [ -d "$PWD"/turtlecoin ]; then
-            read -r -p "${1:-turtlecoin directory already exists. Overwrite? [y/N]} " response
+        if [ -d "$PWD"/catalanscoin ]; then
+            read -r -p "${1:-catalanscoin directory already exists. Overwrite? [y/N]} " response
             case "$response" in
                 [yY][eE][sS|[yY])
-                    _colorize red "Overwriting old turtlecoin directory" && echo
-                    rm -rf "$PWD"/turtlecoin
+                    _colorize red "Overwriting old catalanscoin directory" && echo
+                    rm -rf "$PWD"/catalanscoin
                     ;;
                 *)
-                    _fail "turtlecoin directory already exists. Aborting..."
+                    _fail "catalanscoin directory already exists. Aborting..."
                     ;;
             esac
         fi
-        mkdir turtlecoin
-        git clone -b master -q https://github.com/turtlecoin/turtlecoin turtlecoin   >>build.log 2>&1 || _fail "Unable to clone git repository. Please see build.log for more information"
-        cd turtlecoin
+        mkdir catalanscoin
+        git clone -b master -q https://github.com/catalanscoin/catalanscoin catalanscoin   >>build.log 2>&1 || _fail "Unable to clone git repository. Please see build.log for more information"
+        cd catalanscoin
     fi
 }
 
-_build_turtlecoin() {
-    _note "Building turtlecoin from source (this might take a while)..."
+_build_catalanscoin() {
+    _note "Building catalanscoin from source (this might take a while)..."
     if [ -d build ]; then
         _colorize red "Overwriting old build directory" && echo
         rm -rf build
@@ -109,7 +109,7 @@ _configure_linux() {
     elif [ "$(awk -F= '/^NAME/{print $2}' /etc/os-release)" = "\"Debian GNU/Linux\"" ]; then
         _configure_debian
     else
-        _fail "Your OS version isn't supported by this installer. Please consider adding support for your OS to the project ('https://github.com/turtlecoin')"
+        _fail "Your OS version isn't supported by this installer. Please consider adding support for your OS to the project ('https://github.com/catalanscoin')"
     fi
 }
 
@@ -138,7 +138,7 @@ _configure_os() {
             _configure_osx
             ;;
         *)
-            _fail "This installer only runs on OSX 10.10+ and Ubuntu 16.04+. Please consider adding support for your OS to the project ('https://github.com/turtlecoin')"
+            _fail "This installer only runs on OSX 10.10+ and Ubuntu 16.04+. Please consider adding support for your OS to the project ('https://github.com/catalanscoin')"
             ;;
     esac
     _note "Operating system configuration completed. You're halfway there!"
@@ -150,7 +150,7 @@ _colorize green " _______         _   _       _____      _       \n|__   __|    
 _configure_os
 
 _set_wd
-_build_turtlecoin
+_build_catalanscoin
 
 _note "Installation complete!"
-_note "Look in 'turtlecoin/build/src/' for the executible binaries. See 'https://github.com/turtlecoin/turtlecoin' for more project support. Cowabunga!"
+_note "Look in 'catalanscoin/build/src/' for the executible binaries. See 'https://github.com/catalanscoin/catalanscoin' for more project support. Cowabunga!"

@@ -6,7 +6,7 @@
 # daemon runs in the background
 # run something like tail /var/log/catalanscoind/current to see the status
 # be sure to run with volumes, ie:
-# docker run -v $(pwd)/catalanscoind:/var/lib/catalanscoind -v $(pwd)/wallet:/home/turtlecoin --rm -ti turtlecoin:0.2.2
+# docker run -v $(pwd)/catalanscoind:/var/lib/catalanscoind -v $(pwd)/wallet:/home/catalanscoin --rm -ti catalanscoin:0.2.2
 ARG base_image_version=0.10.0
 FROM phusion/baseimage:$base_image_version
 
@@ -17,7 +17,7 @@ ADD https://github.com/just-containers/socklog-overlay/releases/download/v2.1.0-
 RUN tar xzf /tmp/socklog-overlay-amd64.tar.gz -C /
 
 # Get the latest checkpoints (we don't care about being _100%_ up-to-date, but we need to be past block 350K for the algo change to CN_lite_v1)
-ADD https://raw.githubusercontent.com/turtlecoin/checkpoints/master/checkpoints.csv /tmp/
+ADD https://raw.githubusercontent.com/catalanscoin/checkpoints/master/checkpoints.csv /tmp/
 
 # In a multi-node testnet, we'll want to have the slave nodes "wait" for the master node to wake up, so let's get ready
 ADD https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh /tmp/
@@ -36,8 +36,8 @@ RUN apt-get update && \
       g++-4.9 \
       git cmake \
       libboost1.58-all-dev && \
-    git clone https://github.com/turtlecoin/turtlecoin.git /src/turtlecoin && \
-    cd /src/turtlecoin && \
+    git clone https://github.com/catalanscoin/catalanscoin.git /src/catalanscoin && \
+    cd /src/catalanscoin && \
     git checkout $TURTLECOIN_BRANCH && \
     sed -i '/std::vector<uint64_t> timestamps_o(timestamps);/i \\/*\n   Lower difficulty to static 500 for testnet\n   The rest of this function is ignored\n*\/\nreturn 500;\n\n' src/CryptoNoteCore/Currency.cpp && \
     sed -i -e 's/"104.236.227.176:11897",/"172.16.76.11:11897",/g' src/CryptoNoteConfig.h && \
@@ -65,7 +65,7 @@ RUN apt-get update && \
     strip /usr/local/bin/zedwallet && \
     strip /usr/local/bin/miner && \
     cd / && \
-    rm -rf /src/turtlecoin && \
+    rm -rf /src/catalanscoin && \
     apt-get remove -y build-essential python-dev gcc-4.9 g++-4.9 git cmake libboost1.58-all-dev && \
     apt-get autoremove -y && \
     apt-get install -y  \
@@ -81,7 +81,7 @@ RUN apt-get update && \
 
 # setup the catalanscoind service
 RUN useradd -r -s /usr/sbin/nologin -m -d /var/lib/catalanscoind catalanscoind && \
-    useradd -s /bin/bash -m -d /home/turtlecoin turtlecoin && \
+    useradd -s /bin/bash -m -d /home/catalanscoin catalanscoin && \
     mkdir -p /etc/services.d/catalanscoind/log && \
     mkdir -p /var/log/catalanscoind && \
     echo "#!/usr/bin/execlineb" > /etc/services.d/catalanscoind/run && \
@@ -97,11 +97,11 @@ RUN useradd -r -s /usr/sbin/nologin -m -d /var/lib/catalanscoind catalanscoind &
     echo "s6-log -bp -- n20 s1000000 /var/log/catalanscoind" >> /etc/services.d/catalanscoind/log/run && \
     chmod +x /etc/services.d/catalanscoind/log/run && \
     echo "/var/lib/catalanscoind true catalanscoind 0644 0755" > /etc/fix-attrs.d/catalanscoind-home && \
-    echo "/home/turtlecoin true turtlecoin 0644 0755" > /etc/fix-attrs.d/turtlecoin-home && \
-    echo "/tmp/checkpoints.csv true turtlecoin 0644 0755" > /etc/fix-attrs.d/turtlecoin-checkpoints && \
+    echo "/home/catalanscoin true catalanscoin 0644 0755" > /etc/fix-attrs.d/catalanscoin-home && \
+    echo "/tmp/checkpoints.csv true catalanscoin 0644 0755" > /etc/fix-attrs.d/catalanscoin-checkpoints && \
     echo "/var/log/catalanscoind true nobody 0644 0755" > /etc/fix-attrs.d/catalanscoind-logs
 
-VOLUME ["/var/lib/catalanscoind", "/home/turtlecoin","/var/log/catalanscoind"]
+VOLUME ["/var/lib/catalanscoind", "/home/catalanscoin","/var/log/catalanscoind"]
 
 ENTRYPOINT ["/init"]
-CMD ["/usr/bin/execlineb", "-P", "-c", "emptyenv cd /home/turtlecoin export HOME /home/turtlecoin s6-setuidgid turtlecoin tail -f /var/log/catalanscoind/current"]
+CMD ["/usr/bin/execlineb", "-P", "-c", "emptyenv cd /home/catalanscoin export HOME /home/catalanscoin s6-setuidgid catalanscoin tail -f /var/log/catalanscoind/current"]

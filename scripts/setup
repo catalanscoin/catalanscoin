@@ -1,4 +1,4 @@
-# setup - pull a copy of turtlecoin-development 
+# setup - pull a copy of catalanscoin-development 
 # and put it inside a timestamped folder.
 # rock made this
 #!/usr/bin/env bash
@@ -32,7 +32,7 @@ echo -e "\n\n\n== CLONING TurtleCoin in $sourcefolder"
 # master branch instead, and it will get the source from the last
 # time that we merged development to master, which normally only
 # happens when we create a version release.
-git clone -b development https://github.com/turtlecoin/turtlecoin $sourcefolder
+git clone -b development https://github.com/catalanscoin/catalanscoin $sourcefolder
 cd $sourcefolder
 ls -al
 
@@ -56,8 +56,8 @@ ls -al
 # distribution. We should also include the LICENSE file in this 
 # zip file just in case.
 echo -e "\n\n\n== COMPRESSING BINARIES"
-wget https://raw.githubusercontent.com/turtlecoin/turtlecoin/development/LICENSE
-zip turtlecoin-dev-bin-$(date +%F)-linux.zip miner LICENSE zedwallet CatalansCoind catalans-service
+wget https://raw.githubusercontent.com/catalanscoin/catalanscoin/development/LICENSE
+zip catalanscoin-dev-bin-$(date +%F)-linux.zip miner LICENSE zedwallet CatalansCoind catalans-service
 
 # Create directories to keep always-up-to-date binaries for 
 # cat Network files. Ideally, your bashrc has aliases to run
