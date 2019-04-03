@@ -32,13 +32,13 @@ after_build:
 
 artifacts:
   - path: catalanscoin-$(APPVEYOR_REPO_TAG_NAME)-windows.zip
-    name: TurtleCoinRelease
+    name: CatalansCoinRelease
 
 deploy:
   - provider: GitHub
     auth_token:
       secure: KFrN1rc9FJN3BEoX99whHEuK5iPHHLmDcZ1Ac7tgT9oR6AxyjL0B+XMQu4wqo+fK
-    artifact: TurtleCoinRelease
+    artifact: CatalansCoinRelease
     draft: false
     prerelease: false
     on:
@@ -54,6 +54,6 @@ deploy:
     region: us-east-2
     set_public: true
     folder: catalanscoin
-    artifact: TurtleCoinRelease
+    artifact: CatalansCoinRelease
     on:
       appveyor_repo_name: catalanscoin/catalanscoin
